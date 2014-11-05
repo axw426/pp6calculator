@@ -1,4 +1,5 @@
 #include <iostream>
+#include <climits>
 
 int main(){
 double a;
@@ -9,20 +10,21 @@ double sum;
  double division;
 int input;
 
+ while(std::cin)
+   {
+  std::cout<<"This is a calculator. To quit press q"<<std::endl;
  std::cout<<"Insert first number\n";
 std::cin>>a;
- if(!std::cin)
-   {
-     std::cout<<"That is not a number"<<std::endl;
-   }
- else{
+ if (!std::cin)
+   { std::cout<<"error"<<std::endl;
+     continue;}
 
  std::cout<<"Insert second number\n";
    std::cin>>b;
  if(!std::cin)
    {
      std::cout<<"That isn't a number"<<std::endl;
-   }
+     continue;}
  else{
  if(b==0)
    {
@@ -56,10 +58,13 @@ std::cin>>a;
   else if(input==4)
     {
       std::cout<<division<<std::endl;
-    }
+    continue}
   else { std::cout<<"You didn't pick an option"<<std::endl; }
  }
  }
- }
+ break;
+}
+
+
 return 0;
 }
