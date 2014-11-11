@@ -14,7 +14,7 @@ double subtract(double a, double b);
 
 double x_intercept(double m, double c);
 
-double y_intercept(double m, double c);
+double y_intercept( double c);
 
 bool quadratic(double a, double b, double c, double& pos, double& neg);
 

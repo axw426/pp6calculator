@@ -32,7 +32,7 @@ double x_intercept(double m, double c)
   return (-c)/m;
 }
 
-double y_intercept(double m, double c)
+double y_intercept(double c)
 {
   return c;  //somewhat pointless
 }
