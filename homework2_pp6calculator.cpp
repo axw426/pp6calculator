@@ -1,6 +1,7 @@
 #include <iostream>
 #include <climits>
 #include <cmath>
+#include <cstdlib>
 
 //Our files
 #include "PP6Math.hpp"
@@ -13,21 +14,30 @@ int main(){
 
 //Define variables
 
-  double a,b,c,d,w,x,y,z,input,output,output2, pos, neg;
+  double a,b,c,d,w,x,y,z,input,output,output2, pos, neg, topchoice;
   char choice;
+  double index[1000], array[1000];
   int size;
 
 //variables defined
 
-/////////////////////////////////////////////////////////////////////////
-////Start of main body
+////Start of main body//////////////
+
   std::cout<<"Welcome to the calculator\n";
+  
+  while(true) ///top level interface///
+    {std::cout<< "Which weeks function would you like to access?\n [1] Week 1\n [2] Week 2\n [0] quit\n";
+      std::cin>>topchoice;
+      std::cout<<"\n\n";
 
+if(input == 0) {break;}
+if(!std::cin){error(); continue;}
+
+
+ if(topchoice==1){ ///first menu////
   while(true)
-    {
-
-  std::cout<<"Which function would you like to do?\n";
-   std::cout<<" [1] Addition\n [2] Subtraction\n [3] Multiplication\n [4] Division\n [5] Find intercepts\n [6] Solve quadratic\n [7] Length of 3-vector\n [8] Length of 4-vector\n [9] Calculate invariant mass\n [10] Order an array\n [0] Quit\n";
+    {std::cout<<"Which function would you like to do?\n";
+     std::cout<<" [1] Addition\n [2] Subtraction\n [3] Multiplication\n [4] Division\n [5] Find intercepts\n [6] Solve quadratic\n [7] Length of 3-vector\n [8] Length of 4-vector\n [9] Calculate invariant mass\n [0] Quit\n";
 
      std::cin>>input;
      std::cout<<std::endl;
@@ -86,7 +96,7 @@ std::cout<<"Answer is "<<output<<" \n";}
 	     std::cout<<"Y-intercept = "<<output2<<"\n \n";
        }
 
- break; }  
+ break; }// break out of choices 1-5
 
 
 //////////end of two input cases/////////////
@@ -129,7 +139,7 @@ std::cout<<"negative root is "<<neg<<"\n\n"; }
    {output=threevector(a,b,c);
      std::cout<<"Answer: "<<output<<"\n\n";}
 
- break;} 
+ break;} //break out of choice 6 and 7
 
 ///////end of three input functions/////////////
 
@@ -165,7 +175,7 @@ std::cout<<"negative root is "<<neg<<"\n\n"; }
 else {output2=sqrt(-1*output);
   std::cout<<"The answer is "<<output2<<"i (though this isn't physical)"<<"\n\n";}
 
-break;}
+ break;}//break out of choice 8
 
  while(input==9)
    {
@@ -218,34 +228,58 @@ break;}
      std::cout<<"The invariant mass is "<<output2<<"\n\n";}
  else{std::cout<<"These numbers aren't physically possible, try again\n\n";}
 
-     break;}
- ////////////////array sorting///////////////
+ break;}//break out of choice 9
+ break;}//end of week 1 choices
+  input=1; } ///end of week 1 interface 
 
- while(input == 10)
+ ////////////////array sorting///////////////
+ if(topchoice==2){ //week two interface
+   while(true){
+ std::cout<<"Which function would you like to do?\n";
+     std::cout<<" [1] Sort Array\n [2] RandomGen\n [0] Quit\n\n";
+
+     std::cin>>input;
+     std::cout<<std::endl;
+
+     if(input == 0) {break;}
+     if(!std::cin){error(); continue;}
+
+ while(input == 1)
    {
      std::cout<<"Enter the size of your array\n";
      std::cin>>size;
      std::cout<<std::endl;
-       double array[1000];
+     if(!std::cin){error(); continue;}
        std::cout<<"enter your numbers"<<std::endl;
        for(int i=0;i<size;i++)
-	 {std::cout<<"Enter number "<<i<<std::endl;
-	   std::cin>>array[i];
+	 {std::cout<<"Enter number "<<i<<": ";
+	  std::cin>>array[i];
+          std::cout<<"\n";
 	 }
-       sort(array, size);
+       sort(array, index, size);
        for(int i=0;i<size;i++)
 	 {std::cout<<array[i]<<" \n";}
-       break;}
+       break;} ///break out of choice 10
 
+ while(input == 2)
+   {double mean, standev;
+     randomgen(mean, standev);
+     std::cout<<"Energy= "<<mean<< "  with standard deviation= "<<standev<<"\n";
+
+     break;}///break out of option 2
  //////end of calculation functions//////
 
- std::cout<<"Would you like to do another calculation? [y/n]\n\n";
+ break; } //end of week two choices loop
+   input=1;} // end of week two interface   
+
+ std::cout<<"Would you like to do another calculation? [y/n]: ";
   std::cin>>choice;
   if(choice=='y')
     {continue;}
   else{break;}
- } //end of while loop
- 
+
+    
+    } // end of top level interface while loop
    std::cout<<"Goodbye\n";
  
 return 0;

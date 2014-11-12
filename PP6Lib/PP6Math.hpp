@@ -26,7 +26,12 @@ double invariantmass(double a, double b, double c, double d, double w, double x,
 
 void swap(double& a, double& b);
 
-void sort(double* a, double size);
+void sort(double* a, double* index, int size);
+
+void error();
+
+void randomgen(double& mean, double& standev);
+
 
 //////declarations end/////////////
 

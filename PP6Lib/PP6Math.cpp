@@ -1,7 +1,8 @@
 #include "PP6Math.hpp"
 #include <iostream>
-#include <limits>
+#include <climits>
 #include <cmath>
+#include <cstdlib>
 
 ///////definitions start///////////
 
@@ -76,17 +77,21 @@ void swap(double& a, double& b)
   temp2 = b;
 
   b= temp1;
-  a=temp2;
+  a= temp2;
 }
+
 //marker
-void sort(double* a, double size)
+void sort(double* a, double* index, int size)
 {
+  for(int i=0;i<size;i++)
+    {index[i]=0+i;}
   while(true)
     {bool noswap=true;
       for (int i=0; i<size-1; i++)
 	{
 	  if(a[i]<=a[i+1]){
 	    swap(a[i],a[i+1]);
+	    swap(index[i],index[i+1]);
 	    noswap=false;
 	  }
 	}
@@ -95,15 +100,27 @@ void sort(double* a, double size)
 }
 
 
-/*New error handler
-bool errorhandle(bool test){
-if(!test)
-     {
-std::cout<<"Not a valid entry\n";
+void error()
+{std::cout<<"Not a valid entry!!\n\n";
  std::cin.clear();
  std::cin.ignore(INT_MAX, '\n');
- return true;}
- return false;}*/
+}
+
+void randomgen(double& mean, double& standev){
+ double mass[100];
+ double p[100];
+ double E[100];
+ double meantemp=0;
+ double standevtemp=0;
+  for(int i=0; i<100; i++)
+     {mass[i]=rand()%100;
+      p[i]=rand()%100;
+      E[i]=sqrt(p[i]*p[i]+mass[i]*mass[i]);
+      meantemp+= E[i];
+      standevtemp+= E[i]*E[i];}
+  mean = meantemp/100;
+  standev = sqrt(standevtemp/100 - mean*mean);} 
+
 
 /////All functions defined//////////////
 
