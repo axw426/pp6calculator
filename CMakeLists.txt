@@ -24,7 +24,7 @@ endif()
 #add directories to look in
 include_directories(PP6Lib)
 
-#Add the PP6Lib library
+#Add the library(s)
 add_subdirectory(PP6Lib)
 
 #add actual program

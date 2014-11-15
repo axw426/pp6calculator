@@ -32,6 +32,7 @@ void error();
 
 void randomgen(double& mean, double& standev);
 
+void readfile();
 
 //////declarations end/////////////
 

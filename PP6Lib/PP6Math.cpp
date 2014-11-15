@@ -1,4 +1,5 @@
 #include "PP6Math.hpp"
+#include "FileReader.hpp"
 #include <iostream>
 #include <climits>
 #include <cmath>
@@ -121,6 +122,56 @@ void randomgen(double& mean, double& standev){
   mean = meantemp/100;
   standev = sqrt(standevtemp/100 - mean*mean);} 
 
+void readfile(){
+  double event[1000], p_x[1000], p_y[1000], p_z[1000],P[1000];
+     std::string name[1000], Data_Source[1000];
+     FileReader f("/home/aw/mpagspp6/observedparticles.dat");
+
+     if(f.isValid()){ std::cout<<"valid input file\n\n";
+       while (f.nextLine()) { //reads each line
+	 int i=0; 
+
+    event[i+1] = f.getFieldAsDouble(1)-2000;
+    name[i+1] = f.getFieldAsString(2);
+    p_x[i+1] = f.getFieldAsDouble(3);
+    p_y[i+1] = f.getFieldAsDouble(4);
+    p_z[i+1] = f.getFieldAsDouble(5);
+    P[i+1] = threevector(p_x[i],p_y[i],p_z[i]);
+    Data_Source[i+1] = f.getFieldAsString(6);
+    if (f.inputFailed()){std::cout<<"Incorrect input file\n";
+ break;}
+	  i++;
+       } ///end of file reading
+     
+///these arrays are the labels for the events in which there is a mu- or mu+
+     double muon[1000]; 
+     double antimuon[1000];
+     int counter=0;
+     int counter2=0;
+     for(int j; j<=1000; j++)
+       {
+	if (Data_Source[j]=="run4.dat" && name[j]== "mu-")
+	   {muon[j]=event[j];
+	    counter++;}
+        if(Data_Source[j]=="run4.dat" &&  name[j]=="mu+")
+	   {antimuon[j]=event[j];
+	    counter2++;}}
+
+     //want to know how many of each particle there are
+    
+     std::cout<<"There are "<<counter<<" muon events\n";
+     std::cout<<"There are "<<counter2<< " anti muon events\n\n";
+     
+     //double combinedmuon[1000];
+     // double muonmass = 0.1057;
+     //  for(int j=0; j<1000; j++)
+     // {for(int k=0; k<1000; k++)
+     //	  {combinedmuon[j]= sqrt(P[muon[j]]*P[anitmuon[k]]+muonmass*muonmass);}}
+      
+     ////this process doesn't seem to work- apparently can't have 
+
+     }///end of while loop
+}
 
 /////All functions defined//////////////
 

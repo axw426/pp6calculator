@@ -5,6 +5,7 @@
 
 //Our files
 #include "PP6Math.hpp"
+#include "FileReader.hpp"
 
 
 //////////////////This forms the interface for the calculator////////////
@@ -14,11 +15,11 @@ int main(){
 
 //Define variables
 
-  double a,b,c,d,w,x,y,z,input,output,output2, pos, neg, topchoice;
+  double a,b,c,d,w,x,y,z,input,output,output2, pos, neg, topchoice,mean,standev;
   char choice;
   double index[1000], array[1000];
   int size;
-
+ 
 //variables defined
 
 ////Start of main body//////////////
@@ -236,7 +237,7 @@ else {output2=sqrt(-1*output);
  if(topchoice==2){ //week two interface
    while(true){
  std::cout<<"Which function would you like to do?\n";
-     std::cout<<" [1] Sort Array\n [2] RandomGen\n [0] Quit\n\n";
+     std::cout<<" [1] Sort Array\n [2] RandomGen\n [3] Analyse File\n [0] Quit\n\n";
 
      std::cin>>input;
      std::cout<<std::endl;
@@ -262,12 +263,15 @@ else {output2=sqrt(-1*output);
        break;} ///break out of choice 10
 
  while(input == 2)
-   {double mean, standev;
-     randomgen(mean, standev);
+   { randomgen(mean, standev);
      std::cout<<"Energy= "<<mean<< "  with standard deviation= "<<standev<<"\n";
 
      break;}///break out of option 2
- //////end of calculation functions//////
+
+ while(input==3)///file analysis
+   {readfile();
+
+     break;}
 
  break; } //end of week two choices loop
    input=1;} // end of week two interface   
