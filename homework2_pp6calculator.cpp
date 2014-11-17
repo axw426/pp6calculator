@@ -311,20 +311,20 @@ std::cout<<"Enter the elements of your 4-vector\n\n";
  std::cout<<"\n";
  if(!std::cin){error(); continue;}
     
- FourVector fv;
- fv.x=x;
- fv.y=y;
- fv.z=z;
- fv.ct=ct;
-
+ FourVector fv(x,y,z,ct);
 
 while(input==1)
-  {boost(fv,B);
-       break;}
+  {
+    fv.boost(B);
+    break;
+  }
+ 
+ while(input==2)
+      {
+	fv.length();
+	break;
+      }
 
-    while(input==2)
-      {length(fv);
-	break;}
 
 	 break;}//end of week three choices
      input=1;  } //end of week three interface
