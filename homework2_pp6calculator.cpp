@@ -6,6 +6,7 @@
 //Our files
 #include "PP6Math.hpp"
 #include "FileReader.hpp"
+#include "Week3.hpp"
 
 
 //////////////////This forms the interface for the calculator////////////
@@ -15,7 +16,7 @@ int main(){
 
 //Define variables
 
-  double a,b,c,d,w,x,y,z,input,output,output2, pos, neg, topchoice,mean,standev;
+  double a,b,B,c,d,w,x,y,z,ct,input,output,output2, pos, neg, topchoice,mean,standev;
   char choice;
   double index[1000], array[1000];
   int size;
@@ -27,7 +28,7 @@ int main(){
   std::cout<<"Welcome to the calculator\n";
   
   while(true) ///top level interface///
-    {std::cout<< "Which weeks function would you like to access?\n [1] Week 1\n [2] Week 2\n [0] quit\n";
+    {std::cout<< "Which weeks function would you like to access?\n [1] Week 1\n [2] Week 2\n [3] Week 3\n [0] quit\n";
       std::cin>>topchoice;
       std::cout<<"\n\n";
 
@@ -274,7 +275,61 @@ else {output2=sqrt(-1*output);
      break;}
 
  break; } //end of week two choices loop
-   input=1;} // end of week two interface   
+   input=1;} // end of week two interface 
+
+
+ if (topchoice==3) ///start of week three interface
+   { while(true){
+    std::cout<<"Which function would you like to do?\n";
+    std::cout<<"[1] Boost a 4-Vector Along z\n [2] Calculate 4-Vector Length\n";
+    std::cin>>input;
+      
+std::cout<<"Enter the elements of your 4-vector\n\n";
+	
+ std::cout<<"x: ";
+ std::cin>>x;
+ std::cout<<"\n";
+ if(!std::cin){error(); continue;}
+
+ std::cout<<"y: ";
+ std::cin>>y;
+ std::cout<<"\n";
+ if(!std::cin){error(); continue;}
+
+ std::cout<<"z: ";
+ std::cin>>z;
+ std::cout<<"\n";
+ if(!std::cin){error(); continue;}
+
+ std::cout<<"ct: ";
+ std::cin>>ct;
+ std::cout<<"\n";
+ if(!std::cin){error(); continue;}
+
+ std::cout<<"B: ";
+ std::cin>>B;
+ std::cout<<"\n";
+ if(!std::cin){error(); continue;}
+    
+ FourVector fv;
+ fv.x=x;
+ fv.y=y;
+ fv.z=z;
+ fv.ct=ct;
+
+
+while(input==1)
+  {boost(fv,B);
+       break;}
+
+    while(input==2)
+      {length(fv);
+	break;}
+
+	 break;}//end of week three choices
+     input=1;  } //end of week three interface
+   
+
 
  std::cout<<"Would you like to do another calculation? [y/n]: ";
   std::cin>>choice;

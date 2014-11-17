@@ -124,7 +124,7 @@ void randomgen(double& mean, double& standev){
 
 void readfile(){
   double event[1000],  p_x[1000], p_y[1000], p_z[1000],P[1000];
-  std::string name[1000], Data_Source[1000], event[1000];
+  std::string name[1000], Data_Source[1000];
      FileReader f("/home/aw/mpagspp6/observedparticles.dat");
 
      if(f.isValid()){ std::cout<<"valid input file\n\n";
