@@ -316,6 +316,7 @@ std::cout<<"Enter the elements of your 4-vector\n\n";
 while(input==1)
   {
     fv.boost(B);
+    fv.x = 2;
     break;
   }
  
@@ -324,7 +325,6 @@ while(input==1)
 	fv.length();
 	break;
       }
-
 
 	 break;}//end of week three choices
      input=1;  } //end of week three interface

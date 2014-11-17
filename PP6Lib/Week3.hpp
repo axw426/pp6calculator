@@ -31,7 +31,9 @@ public:
   invariant = f_ct*f_ct-threevector(f_x,f_y,f_z);
   std::cout<<"The invariant length is: "<<invariant<<"\n\n";
   }
+  void getValues();
 
+private:
   //member variables
   double f_x; //x
   double f_y; //y

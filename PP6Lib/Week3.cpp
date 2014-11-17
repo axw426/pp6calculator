@@ -13,6 +13,7 @@ FourVector:: FourVector(const double x, const double y, const double z,const dou
 : f_x(x),f_y(y),f_z(z),f_ct(ct)
 {}
 
+
 void destroyFourVector( FourVector *&fv)
 {
   if (fv) 
