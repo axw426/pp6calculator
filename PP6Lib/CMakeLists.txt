@@ -1,3 +1,3 @@
 
 # add sources for library
-add_library(pp6lib /home/aw/mpagspp6/p66caculator.git/PP6Lib/PP6Math.hpp /home/aw/mpagspp6/p66caculator.git/PP6Lib/PP6Math.cpp /home/aw/mpagspp6/p66caculator.git/PP6Lib/FileReader.cpp /home/aw/mpagspp6/p66caculator.git/PP6Lib/FileReader.hpp /home/aw/mpagspp6/p66caculator.git/PP6Lib/Week3.cpp /home/aw/mpagspp6/p66caculator.git/PP6Lib/Week3.hpp)
+add_library(pp6lib /home/aw/mpagspp6/p66caculator.git/PP6Lib/PP6Math.hpp /home/aw/mpagspp6/p66caculator.git/PP6Lib/PP6Math.cpp /home/aw/mpagspp6/p66caculator.git/PP6Lib/FileReader.cpp /home/aw/mpagspp6/p66caculator.git/PP6Lib/FileReader.hpp /home/aw/mpagspp6/p66caculator.git/PP6Lib/fourvectorlib.cpp /home/aw/mpagspp6/p66caculator.git/PP6Lib/fourvectorlib.hpp  /home/aw/mpagspp6/p66caculator.git/PP6Lib/threevectorlib.cpp /home/aw/mpagspp6/p66caculator.git/PP6Lib/threevectorlib.hpp)
