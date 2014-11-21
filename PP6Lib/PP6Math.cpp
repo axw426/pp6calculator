@@ -174,12 +174,11 @@ void readfile()
      
       if (Data_Source[i]=="run4.dat" && name[i]== "mu-")
 	{
-	  Particle p(12,p_x[counter],p_y[counter],p_z[counter],muonmass);	 	
-	  p.p_Energy();
+	  Particle p(12,p_x[counter],p_y[counter],p_z[counter],muonmass);	 	  p.p_Energy();
 	  energy[counter]=p.p_getEnergy();
 	  muoneventnumber[counter]=event[i];
 
-	  FourVector fv(p_x[counter],p_y[counter],p_z[counter],energy[counter]);
+	  FourVector fv=p.p_getFourVector();
 	  fv.f_length();
 	  muonfv[counter]=fv;
 	  	  
@@ -193,9 +192,9 @@ void readfile()
 	  energy[anticounter]=p.p_getEnergy();
 	  antimuoneventnumber[anticounter]=event[i];
 
-	  FourVector fv(p_x[anticounter],p_y[anticounter],p_z[anticounter],energy[anticounter]);
+	  FourVector fv=p.p_getFourVector();
+	  fv.f_length();
 	  antimuonfv[anticounter]=fv;
-	  antimuonfv[anticounter].f_length();
 	  anticounter++;
 	} 
 

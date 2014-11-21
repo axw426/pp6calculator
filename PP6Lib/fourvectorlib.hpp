@@ -2,6 +2,7 @@
 #define fourvectorlib
 #include <cmath>
 #include <iostream>
+#include "threevectorlib.hpp"
 
 class FourVector{
 public:
@@ -9,7 +10,8 @@ public:
   FourVector() {f_x=0; f_y=0; f_z=0; f_ct=0;} 
   FourVector(const double x, const double y, const double z,const double ct);
   FourVector(const FourVector& other);
- 
+  FourVector(ThreeVector& tv, const double ct);
+
   ///operator overloads
   FourVector& operator+=(const FourVector& rhs);
 

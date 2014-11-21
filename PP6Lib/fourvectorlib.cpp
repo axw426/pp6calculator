@@ -18,6 +18,10 @@ FourVector::FourVector(const FourVector& other)
   :f_x(other.f_x), f_y(other.f_y), f_z(other.f_z), f_ct(other.f_ct)
 {}
 
+FourVector::FourVector(ThreeVector& tv, const double ct)
+  :f_x(tv.t_getXValue()), f_y(tv.t_getYValue()), f_z(tv.t_getZValue()),f_ct(ct)
+{}
+
 double FourVector::f_getXValue() const 
 {return f_x;}
 
