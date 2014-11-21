@@ -18,7 +18,7 @@ public:
   ThreeVector& operator-=(const ThreeVector& rhs);
  ///member functions
   
-  void t_magnitude();
+  double t_magnitude();
 
   double t_getXValue() const;
   double t_getYValue() const;

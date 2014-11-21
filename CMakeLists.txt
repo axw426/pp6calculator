@@ -28,7 +28,7 @@ include_directories(PP6Lib)
 add_subdirectory(PP6Lib)
 
 #add actual program
-add_executable(pp6calculator homework3_pp6calculator.cpp)
+add_executable(pp6calculator pp6calculator.cpp)
 
 #Link library to executable
 target_link_libraries(pp6calculator pp6lib)

@@ -31,7 +31,7 @@ public:
   double f_getCTValue() const;
   double f_getLength() const;
 
-  void f_changeX(FourVector fv, double x) const;
+  void f_changeX(FourVector fv,double x) const;
   void f_changeY(FourVector fv, double y) const;
   void f_changeZ(FourVector fv, double z) const;
   void f_changeCT(FourVector fv, double ct) const; 

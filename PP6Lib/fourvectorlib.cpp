@@ -64,7 +64,7 @@ void FourVector::f_boost(double B) const
 void FourVector::f_length()
 {
   length=f_ct*f_ct-f_x*f_x-f_y*f_y-f_z*f_z;
-  std::cout<<"The invariant length is: "<<length<<"\n\n";
+
 }
 
 

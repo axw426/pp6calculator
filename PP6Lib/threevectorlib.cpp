@@ -38,11 +38,11 @@ void ThreeVector::t_changeZ(ThreeVector tv, double z) const
 {tv.t_z=z;}
 
 
-void ThreeVector::t_magnitude()
+double ThreeVector::t_magnitude()
 {
   magnitude=t_x*t_x+t_y*t_y+t_z*t_z;
 
-  std::cout<<"The invariant length is: "<<magnitude<<"\n\n";
+  return magnitude;
 }
 
 ///operator overloads////
