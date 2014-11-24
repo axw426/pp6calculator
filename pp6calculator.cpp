@@ -2,6 +2,7 @@
 #include <climits>
 #include <cmath>
 #include <cstdlib>
+#include <vector>
 
 //Our files
 #include "PP6Math.hpp"
@@ -9,6 +10,7 @@
 #include "fourvectorlib.hpp"
 #include "threevectorlib.hpp"
 #include "particlelib.hpp"
+#include "ParticleInfo.hpp"
 
 
 //////////////////This forms the interface for the calculator////////////
@@ -31,7 +33,7 @@ int size;
   
   while(true) ///top level interface///
     {
-      std::cout<< "Which weeks function would you like to access?\n [1] Week 1\n [2] Week 2\n [3] Week 3\n [0] quit\n";
+      std::cout<< "Which weeks function would you like to access?\n [1] Week 1\n [2] Week 2\n [3] Week 3\n [4] Week 4(Display PDG Table)\n [0] quit\n";
       std::cin>>topchoice;
       std::cout<<"\n\n";
 
@@ -329,6 +331,31 @@ int size;
 	    break;}//end of week three choices
 	  input=1;} //end of week three interface
       
+      while(topchoice==4)	
+	{
+	  std::cout<<"Here is the PDG Table\n\n";
+std::vector<std::string> Particlename;
+	  std::vector<double> PDG_ID, charge, mass;
+	  FileReader f("/home/aw/mpagspp6/pdg.dat");
+	  if(f.isValid()){ std::cout<<"valid input file\n\n";
+	    while (f.nextLine()) { //reads each line 
+	      Particlename.push_back(f.getField<std::string>(1));
+	      PDG_ID.push_back(f.getField<double>(2));
+	      charge.push_back(f.getField<double>(3));
+	      mass.push_back(f.getField<double>(4));
+
+	      if (f.inputFailed()){std::cout<<"Incorrect input file\n";
+		break;}
+	    } //end of file reading
+
+	    int i= mass.size();
+	    for(auto j=0;j<i; j++)
+	      {std::cout<<Particlename[j]<<" "<<PDG_ID[j]<<" "<<charge[j]<<" "<<mass[j]<<"\n\n";
+	      }
+	  } 
+
+	      break;}///end of week four
+
       std::cout<<"Would you like to do another calculation? [y/n]: ";
       std::cin>>choice;
       if(choice=='y')
