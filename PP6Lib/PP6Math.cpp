@@ -2,11 +2,16 @@
 #include "FileReader.hpp"
 #include "fourvectorlib.hpp"
 #include "threevectorlib.hpp"
-#include"particlelib.hpp"
+#include "particlelib.hpp"
+#include "ParticleInfo.hpp"
 #include <iostream>
 #include <climits>
 #include <cmath>
 #include <cstdlib>
+#include <iterator>
+#include <algorithm>
+#include <vector>
+#include <map>
 
 ///////definitions start///////////
 
@@ -145,91 +150,88 @@ void randomgen(double& mean, double& standev){
   mean = meantemp/100;
   standev = sqrt(standevtemp/100 - mean*mean);} 
 
-void readfile()
-{
-  double event[2000];
-  double p_x[2000];
-  double  p_y[2000];
-  double  p_z[2000];
-  double energy[2000];
-  std::string name[2000], Data_Source[2000];
-  FileReader f("/home/aw/mpagspp6/observedparticles.dat");
-  FourVector muonfv[2000], antimuonfv[2000];
-  int i=0; 
-  int counter=0;
-  int anticounter=0;
-  int antimuoneventnumber[2000],muoneventnumber[2000];
  
-  const double muonmass=0.1056583715;
-
-  if(f.isValid()){ std::cout<<"valid input file\n\n";
-    while (f.nextLine()) { //reads each line 
-
-      event[i] = f.getFieldAsDouble(1);
-      name[i] = f.getFieldAsString(2);
-      p_x[i] = f.getFieldAsDouble(3);
-      p_y[i] = f.getFieldAsDouble(4);
-      p_z[i] = f.getFieldAsDouble(5);
-      Data_Source[i] = f.getFieldAsString(6);
-     
-      if (Data_Source[i]=="run4.dat" && name[i]== "mu-")
-	{
-	  Particle p(12,p_x[counter],p_y[counter],p_z[counter],muonmass);	 	  p.p_Energy();
-	  energy[counter]=p.p_getEnergy();
-	  muoneventnumber[counter]=event[i];
-
-	  FourVector fv=p.p_getFourVector();
-	  fv.f_length();
-	  muonfv[counter]=fv;
-	  	  
-	  counter++;
-	}
-     
-      if (Data_Source[i]=="run4.dat" && name[i]== "mu+")
-	{
-	  Particle p(-12,p_x[anticounter],p_y[anticounter],p_z[anticounter],muonmass);	 
-	  p.p_Energy();
-	  energy[anticounter]=p.p_getEnergy();
-	  antimuoneventnumber[anticounter]=event[i];
-
-	  FourVector fv=p.p_getFourVector();
-	  fv.f_length();
-	  antimuonfv[anticounter]=fv;
-	  anticounter++;
-	} 
-
-      if (f.inputFailed()){std::cout<<"Incorrect input file\n";
-	break;}
-      i++;
-    } ///end of file reading
-        
-    int* muonPairIndex(new int[counter*anticounter]);
-    double* invariantmasses(new double[counter*anticounter]);
-    for(int i=0;i<counter;i++) //sum over muons
-      {
-	for(int j=0;j<anticounter;j++) //sum over antimuons
-	  {
-	    FourVector temp = muonfv[i]+antimuonfv[j];
-	    temp.f_length();
-	    invariantmasses[i*counter+j]=temp.f_getLength();
-	    muonPairIndex[i*counter+j] = i*counter+j;
-	  }
-      }
+void readfile()
+ {
+   ParticleInfo PDG("/home/aw/mpagspp6/pdg.dat");
+   std::vector<double> event, muonevent, antimuonevent;
+   std::vector<ThreeVector> threevector;
+   std::vector<FourVector> muonfv, antimuonfv;
+   std::vector<std::string> name, datasource;
+   int i=0;
    
-    std::cout<<"There are "<<counter<<" muon events\n";
-    std::cout<<"There are "<<anticounter<< " anti muon events\n\n";
+   FileReader f("/home/aw/mpagspp6/observedparticles.dat");
+   if(f.isValid()){ std::cout<<"valid input file\n\n";
+     while (f.nextLine()) { //reads each line 
+       
+       ThreeVector tv(f.getFieldAsDouble(3),f.getFieldAsDouble(4),f.getFieldAsDouble(5));
+       threevector.push_back(tv);
+       name.push_back(f.getFieldAsString(2));
+       datasource.push_back(f.getFieldAsString(6));
+       
+       if (datasource.at(i)=="run4.dat" && name.at(i)== "mu-")
+	 { 
+	   muonevent.push_back(f.getFieldAsInt(1));   
+	   Particle p(PDG.i_getPDG("mu-"), threevector.at(i),PDG.i_getMassGeV("mu-")); 
+	   p.p_Energy(); 
+	   FourVector fv=p.p_getFourVector();
+	   fv.f_length();
+	   muonfv.push_back(fv); 
+	 }
+     
+       if (datasource.at(i)=="run4.dat" && name.at(i)== "mu+")
+	 {
+	   antimuonevent.push_back(f.getFieldAsInt(1)); 
+	   Particle p(PDG.i_getPDG("mu+"), threevector.at(i),PDG.i_getMassGeV("mu+"));
+	   p.p_Energy(); //evaluate energy of particle
+	   FourVector fv=p.p_getFourVector();
+	   fv.f_length();
+	   antimuonfv.push_back(fv); 
+	 } 
+
+       if (f.inputFailed()){std::cout<<"Incorrect input file\n";
+	 break;}
+       i++;
+       } ///end of file reading
+
+     std::vector<double> invariantmasses;
+     std::vector<int> pairindex;
+     std::vector<double>::iterator iter = muonevent.begin();
+     std::vector<double>::iterator iterend = muonevent.end();
+     std::vector<double>::iterator iter_antiend = antimuonevent.end();
+     typedef std::map<double, int> indexer;
+     indexer muonindex;
+     indexer antimuonindex;
+
+     for(int i=0; iter!=iterend; ++iter, i++) //sum over muons
+       {
+	 std::vector<double>::iterator iter_anti = antimuonevent.begin();
+	 
+	 for(int j=0; iter_anti!=iter_antiend ; ++iter_anti, j++) //sum over antimuons
+	   {
+	     FourVector temp = muonfv.at(i)+antimuonfv.at(j);
+	     temp.f_length();
+	     invariantmasses.push_back(temp.f_getLength());
+	     muonindex.insert(std::make_pair(temp.f_getLength(),muonevent.at(i)));
+	     antimuonindex.insert(std::make_pair(temp.f_getLength(),antimuonevent.at(j)));
+	   }
+       }  ///invariant mass vector and index created
+       
+     std::sort(invariantmasses.begin(), invariantmasses.end());
+     std::reverse(invariantmasses.begin(), invariantmasses.end());
+
+     std::cout<<"There are "<<muonevent.size()<<" muon events\n";
+     std::cout<<"There are "<<antimuonevent.size()<< " anti muon events\n\n";
+     std::cout<<"The top ten invariantmasses are: \n\n";
+          
+     for(int i=0; i<10; i++)
+       { double a = invariantmasses.at(i);
+	 std::cout<<a<<" with muon from event "<<(*muonindex.find(a)).second<<" and anti muon from event "<<(*antimuonindex.find(a)).second<<"\n";}
   
-    associative_sort(invariantmasses, muonPairIndex, counter*anticounter);
+   }///end of "if file is valid"
+ } 
 
-   
-    std::cout<<"The top ten invariant masses are: \n";
-    for (int i=0;i<10;i++)
-      {
-		int muonIndex(muonPairIndex[i] % counter);
-		int antimuonIndex((muonPairIndex[i]-muonIndex)/counter);
-	std::cout<<invariantmasses[muonPairIndex[i]]<<" with muon from event "<<muoneventnumber[muonIndex]<<" and antimuon from event "<<antimuoneventnumber[antimuonIndex]<<std::endl;
-      } 
-    }///end of "if file is valid"
-}
+
 /////All functions defined//////////////
+
 

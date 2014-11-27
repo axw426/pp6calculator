@@ -47,7 +47,7 @@ public:
   double i_getCharge(std::string a) const;
   double i_getMass(std::string a) const;
   std::string i_getName(int a) const;
-  double i_getMassGev(std::string a) const;
+  double i_getMassGeV(std::string a) const;
   
 
 

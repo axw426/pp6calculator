@@ -54,6 +54,7 @@ FourVector Particle::p_getFourVector() const
 {FourVector fv(p_px, p_py, p_pz, energy);
   return fv;}
 
+
 void Particle::p_changePDG(Particle p, double PDG) const
 {p.p_PDG=PDG;}
 

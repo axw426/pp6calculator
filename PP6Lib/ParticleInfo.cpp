@@ -32,7 +32,7 @@ if(p != particlemassGeV.end()) { return (*p).second ;}
   else return 0;
 } 
 
-double ParticleInfo::i_getMassGev(std::string a) const 
+double ParticleInfo::i_getMassGeV(std::string a) const 
 {PartStringDouble::const_iterator p = particlemassGeV.find(a);
 if(p != particlemassGeV.end()) { return (*p).second/1000 ;}
   else return 0;
