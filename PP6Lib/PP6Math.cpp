@@ -152,84 +152,83 @@ void randomgen(double& mean, double& standev){
 
  
 void readfile()
- {
-   ParticleInfo PDG("/home/aw/mpagspp6/pdg.dat");
-   std::vector<double> event, muonevent, antimuonevent;
-   std::vector<ThreeVector> threevector;
-   std::vector<FourVector> muonfv, antimuonfv;
-   std::vector<std::string> name, datasource;
-   int i=0;
+{
+  ParticleInfo PDG("/home/aw/mpagspp6/pdg.dat"); //link in PDG table
+  std::vector<double> event, muonevent, antimuonevent;
+  std::vector<ThreeVector> threevector;
+  std::vector<FourVector> muonfv, antimuonfv;
+  std::vector<std::string> name, datasource;
+  int i=0;
    
-   FileReader f("/home/aw/mpagspp6/observedparticles.dat");
-   if(f.isValid()){ std::cout<<"valid input file\n\n";
-     while (f.nextLine()) { //reads each line 
+  FileReader f("/home/aw/mpagspp6/observedparticles.dat");
+  if(f.isValid()){ std::cout<<"valid input file\n\n";
+    while (f.nextLine()) {
        
-       ThreeVector tv(f.getFieldAsDouble(3),f.getFieldAsDouble(4),f.getFieldAsDouble(5));
-       threevector.push_back(tv);
-       name.push_back(f.getFieldAsString(2));
-       datasource.push_back(f.getFieldAsString(6));
+      ThreeVector tv(f.getFieldAsDouble(3),f.getFieldAsDouble(4),f.getFieldAsDouble(5)); //get info needed to select muons
+      threevector.push_back(tv);
+      name.push_back(f.getFieldAsString(2));
+      datasource.push_back(f.getFieldAsString(6));
        
-       if (datasource.at(i)=="run4.dat" && name.at(i)== "mu-")
-	 { 
-	   muonevent.push_back(f.getFieldAsInt(1));   
-	   Particle p(PDG.i_getPDG("mu-"), threevector.at(i),PDG.i_getMassGeV("mu-")); 
-	   p.p_Energy(); 
-	   FourVector fv=p.p_getFourVector();
-	   fv.f_length();
-	   muonfv.push_back(fv); 
-	 }
+      if (datasource.at(i)=="run4.dat" && name.at(i)== "mu-") //pick mu- events
+	{ 
+	  muonevent.push_back(f.getFieldAsInt(1));   
+	  Particle p(PDG.i_getPDG("mu-"), threevector.at(i),PDG.i_getMassGeV("mu-")); 
+	  p.p_Energy(); 
+	  FourVector fv=p.p_getFourVector();
+	  fv.f_length();
+	  muonfv.push_back(fv); 
+	}
      
-       if (datasource.at(i)=="run4.dat" && name.at(i)== "mu+")
-	 {
-	   antimuonevent.push_back(f.getFieldAsInt(1)); 
-	   Particle p(PDG.i_getPDG("mu+"), threevector.at(i),PDG.i_getMassGeV("mu+"));
-	   p.p_Energy(); //evaluate energy of particle
-	   FourVector fv=p.p_getFourVector();
-	   fv.f_length();
-	   antimuonfv.push_back(fv); 
-	 } 
+      if (datasource.at(i)=="run4.dat" && name.at(i)== "mu+") //pick mu+ events
+	{
+	  antimuonevent.push_back(f.getFieldAsInt(1)); 
+	  Particle p(PDG.i_getPDG("mu+"), threevector.at(i),PDG.i_getMassGeV("mu+"));
+	  p.p_Energy(); //evaluate energy of particle
+	  FourVector fv=p.p_getFourVector();
+	  fv.f_length();
+	  antimuonfv.push_back(fv); 
+	} 
 
-       if (f.inputFailed()){std::cout<<"Incorrect input file\n";
-	 break;}
-       i++;
-       } ///end of file reading
+      if (f.inputFailed()){std::cout<<"Incorrect input file\n";
+	break;}
+      i++;
+    } ///end of file reading
+    //now on to combining and sorting data
+    std::vector<double> invariantmasses;
+    std::vector<int> pairindex;
+    std::vector<double>::iterator iter = muonevent.begin();
+    std::vector<double>::iterator iterend = muonevent.end();
+    std::vector<double>::iterator iter_antiend = antimuonevent.end();
+    typedef std::map<double, int> indexer;
+    indexer muonindex;
+    indexer antimuonindex;
 
-     std::vector<double> invariantmasses;
-     std::vector<int> pairindex;
-     std::vector<double>::iterator iter = muonevent.begin();
-     std::vector<double>::iterator iterend = muonevent.end();
-     std::vector<double>::iterator iter_antiend = antimuonevent.end();
-     typedef std::map<double, int> indexer;
-     indexer muonindex;
-     indexer antimuonindex;
-
-     for(int i=0; iter!=iterend; ++iter, i++) //sum over muons
-       {
-	 std::vector<double>::iterator iter_anti = antimuonevent.begin();
+    for(int i=0; iter!=iterend; ++iter, i++) //sum over muons
+      {
+	std::vector<double>::iterator iter_anti = antimuonevent.begin(); //must be inside loop so it's reset
 	 
-	 for(int j=0; iter_anti!=iter_antiend ; ++iter_anti, j++) //sum over antimuons
-	   {
-	     FourVector temp = muonfv.at(i)+antimuonfv.at(j);
-	     temp.f_length();
-	     invariantmasses.push_back(temp.f_getLength());
-	     muonindex.insert(std::make_pair(temp.f_getLength(),muonevent.at(i)));
-	     antimuonindex.insert(std::make_pair(temp.f_getLength(),antimuonevent.at(j)));
-	   }
-       }  ///invariant mass vector and index created
+	for(int j=0; iter_anti!=iter_antiend ; ++iter_anti, j++) //sum over antimuons
+	  {
+	    FourVector temp = muonfv.at(i)+antimuonfv.at(j); //combine muons 
+	    temp.f_length();
+	    invariantmasses.push_back(temp.f_getLength());
+	    muonindex.insert(std::make_pair(temp.f_getLength(),muonevent.at(i))); //map invariant mass to muons that created them
+	    antimuonindex.insert(std::make_pair(temp.f_getLength(),antimuonevent.at(j)));
+	  }
+      }  ///invariant mass vector and indexes created
        
-     std::sort(invariantmasses.begin(), invariantmasses.end());
-     std::reverse(invariantmasses.begin(), invariantmasses.end());
+    std::sort(invariantmasses.begin(), invariantmasses.end()); ///reorder the masses
+    std::reverse(invariantmasses.begin(), invariantmasses.end());
 
-     std::cout<<"There are "<<muonevent.size()<<" muon events\n";
-     std::cout<<"There are "<<antimuonevent.size()<< " anti muon events\n\n";
-     std::cout<<"The top ten invariantmasses are: \n\n";
-          
-     for(int i=0; i<10; i++)
-       { double a = invariantmasses.at(i);
-	 std::cout<<a<<" with muon from event "<<(*muonindex.find(a)).second<<" and anti muon from event "<<(*antimuonindex.find(a)).second<<"\n";}
+    std::cout<<"There are "<<muonevent.size()<<" muon events\n";
+    std::cout<<"There are "<<antimuonevent.size()<< " anti muon events\n\n";
+    std::cout<<"The top ten invariantmasses are: \n\n";
+    for(int i=0; i<10; i++)
+      { double a = invariantmasses.at(i);
+	std::cout<<a<<" with muon from event "<<(*muonindex.find(a)).second<<" and anti muon from event "<<(*antimuonindex.find(a)).second<<"\n";}
   
-   }///end of "if file is valid"
- } 
+  }///end of "if file is valid"
+} 
 
 
 /////All functions defined//////////////
